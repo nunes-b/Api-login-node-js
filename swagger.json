@@ -1,0 +1,251 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API de Login de Usuários",
+    "version": "1.0.0",
+    "description": "API para gerenciamento de criação e login de usuários retornando TOKEN JWT"
+  },
+  "host": "api.example.com",
+  "basePath": "/v1",
+  "schemes": ["http"],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Realizar login",
+        "description": "Endpoint para realizar login de usuário e obter um TOKEN JWT de autenticação",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequestBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "400": {
+            "description": "Erro ao realizar login"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Obter lista de usuários",
+        "description": "Endpoint para obter a lista de usuários",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Erro ao encontrar usuários"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar usuário",
+        "description": "Endpoint para criar um novo usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Erro ao criar usuário"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Obter usuário por ID",
+        "description": "Endpoint para obter um usuário específico pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Erro ao encontrar usuário"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar usuário",
+        "description": "Endpoint para atualizar um usuário existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Erro ao atualizar usuário"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar usuário",
+        "description": "Endpoint para deletar um usuário existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado com sucesso"
+          },
+          "400": {
+            "description": "Erro ao deletar usuário"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginRequestBody": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email do usuário"
+        },
+        "password": {
+          "type": "string",
+          "description": "Senha do usuário"
+        }
+      },
+      "required": ["email", "password"]
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID do usuário"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email do usuário"
+            }
+          }
+        },
+        "token": {
+          "type": "string",
+          "description": "Token JWT de autenticação"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID do usuário"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email do usuário"
+        }
+      }
+    },
+    "CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email do usuário"
+        },
+        "password": {
+          "type": "string",
+          "description": "Senha do usuário"
+        }
+      },
+      "required": ["email", "password"]
+    },
+    "UpdateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email do usuário"
+        },
+        "password": {
+          "type": "string",
+          "description": "Senha do usuário"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
